@@ -1,16 +1,13 @@
-from bs4 import BeautifulSoup
-import requests
-
-from utils import get_page_content
+from scrapers.utils import get_page_content
 
 
 iw_condos_url = 'https://www.rinconrealestateforsale.com/Rincon_Condominiums/page_2690646.html'
 
 
-def main():
+def get_island_condos():
     page = get_page_content(iw_condos_url)
     condos = _get_condos(page)
-    print(condos)
+    return condos
 
 
 def _get_condos(page):
@@ -60,4 +57,4 @@ def _get_bathrooms_and_bedrooms(condo, condo_div):
 
 
 if __name__ == '__main__':
-    main()
+    get_island_condos()

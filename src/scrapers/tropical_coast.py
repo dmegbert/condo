@@ -1,20 +1,19 @@
 from concurrent.futures import ThreadPoolExecutor, as_completed
-import time
 
-from utils import get_page_content
+from scrapers.utils import get_page_content
 
 
 def _url(suffix):
     return f'https://www.realestaterinconpr.com/{suffix}'
 
 
-def main():
+def get_tropical_condos():
     sitemap = get_page_content(_url('SiteMap.html'))
     condo_urls = _get_rincon_condo_urls(sitemap)
     condos = []
 
     with ThreadPoolExecutor() as executor:
-        future_to_page = {executor.submit(_get_condo_page, url_suffix) : url_suffix for url_suffix in condo_urls}
+        future_to_page = {executor.submit(_get_condo_page, url_suffix): url_suffix for url_suffix in condo_urls}
         for future in as_completed(future_to_page):
             url_suffix = future_to_page[future]
             try:
@@ -23,8 +22,7 @@ def main():
                 condos.append(condo)
             except Exception as exc:
                 print(exc)
-    # TODO Do something with condos list
-    print(condos)
+    return condos
 
 
 def _get_rincon_condo_urls(page):
@@ -72,17 +70,17 @@ def _get_condo_photo(page):
 
 
 if __name__ == '__main__':
-    main()
+    get_tropical_condos()
 
-data = [
-    {
-        'bathrooms': 0,
-        'bedrooms': 0,
-        'photo': 'full_url',
-        'price': '$392,000',
-        'url': 'ful_url'
-    },
-    {
-        'etc': 0
-    }
-]
+# data = [
+#     {
+#         'bathrooms': 0,
+#         'bedrooms': 0,
+#         'photo': 'full_url',
+#         'price': '$392,000',
+#         'url': 'ful_url'
+#     },
+#     {
+#         'etc': 0
+#     }
+# ]
