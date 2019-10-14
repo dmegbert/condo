@@ -24,13 +24,14 @@ def send_condos():
     contents = make_contents()
     yag = yagmail.SMTP('python.email.879')
     subject = f'Rincon Condos {date.today()}'
-    yag.send(['dmegbert@gmail.com', 'shanoz617@gmail.com'], subject, contents)
+    to = ['dmegbert@gmail.com', 'shanoz617@gmail.com']
+    yag.send('dmegbert@gmail.com', subject, contents)
 
 
 def make_contents():
     with open('/Users/egbert/projects/condo/data/condos.json', 'r') as f:
         data = json.load(f)
-    data = sorted(data, key=lambda i: i.get('price'))
+    data = sorted(data, key=lambda i: int(i.get('bedrooms')), reverse=True)
     template_start = f'<h2>Check out {len(data)} possible dream homes!</h2><table><tbody>'
     template_end = '</tbody></table>'
     table_rows = [(get_template(**condo)) for condo in data]
