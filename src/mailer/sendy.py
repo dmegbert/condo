@@ -5,6 +5,21 @@ import yagmail
 
 
 def get_template(**kwargs):
+    if kwargs.get('new_listing'):
+        return """
+            <tr>
+                <td>
+                    <img src="{photo}">
+                </td>
+                <td>
+                    <p><b>New Listing!</b></p>
+                    <p>Price: {price}</p>
+                    <p>Bedrooms: {bedrooms}</p>
+                    <p>Bathrooms: {bathrooms}</p>
+                    <p><a href="{url}" target="_blank">Listing Link</a></p>
+                </td>
+            </tr>
+        """.format(**kwargs)
     return """
     <tr>
         <td>
@@ -45,7 +60,7 @@ def _sorter(element):
         bedrooms = int(element.get('bedrooms'))
     except ValueError:
         pass
-    return bedrooms
+    return element.get('new_listing', False), bedrooms
 
 
 if __name__ == '__main__':
